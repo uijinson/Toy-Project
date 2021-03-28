@@ -5,10 +5,15 @@
 .background {
   background-image: url(../background_alcohol.jpg);
   background-position: center;
-  color: white;
+  z-index: 0;
 }
 .background:hover {
   filter: brightness(50%);
+  z-index: 1;
+}
+.texts {
+  color: white;
+  z-index: 3;
 }
 
 .App-logo {
