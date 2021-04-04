@@ -4,14 +4,17 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav, NavDropdown, Button, Jumbotron } from 'react-bootstrap'; 
 import { Link, Route, Switch } from 'react-router-dom';
-import './CSS/App.css';
+import './css/App.css';
 import dataAPI from './dataAPI';
-import Login from './Login.js';
+import SignUpModal from './modals/SignUpModal';
+import SignInModal from './modals/SignInModal';
 
 function App() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [SignUpModalOn, setSignUpModalOn] = useState(false);
+  const [SignInModalOn, setSignInModalOn] = useState(false);
 
   let [api, apiChange] = useState(dataAPI);
 
@@ -21,6 +24,15 @@ function App() {
 
   return (
     <div className="App">
+      <SignUpModal 
+        show={SignUpModalOn} 
+        onHide={()=>{ setSignUpModalOn(false) }}
+      ></SignUpModal>
+      <SignInModal 
+        show={SignInModalOn} 
+        onHide={()=>{ setSignInModalOn(false) }}
+        setEmailHandler={setEmailHandler}
+      ></SignInModal>
 
       <Switch>
         <Route exact path="/">
@@ -29,6 +41,12 @@ function App() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto">
+                <Nav.Link>
+                  <Button variant="primary" onClick={()=>setSignInModalOn(true)}>Sign In</Button>
+                </Nav.Link>
+                <Nav.Link>
+                  <Button variant="secondary" onClick={()=>setSignUpModalOn(true)}>Sign Up</Button>
+                </Nav.Link>
                 {/* <Nav.Link as={Link} to="/">Home</Nav.Link>
                 <Nav.Link as={Link} to="/detail">Detail</Nav.Link> */}
                 <NavDropdown title="Dropdown" id="basic-nav-dropdown">
@@ -57,18 +75,6 @@ function App() {
             </div>
           </Jumbotron>
 
-          {
-            email === ""
-            ? <div>
-                로그인하시면 고객 데이터를 바탕으로
-                맞춤형 서비스를 받아보실 수 있습니다.
-                로그인하시겠습니까?
-                <Button href="/login">Login</Button>
-              </div>
-            : null
-          }
-          
-
           <div className="container">
             <div className="row">
               {
@@ -79,21 +85,10 @@ function App() {
             </div>
           </div>
         </Route>
-
-        <Route path="/login">
-          <Login setEmail={setEmailHandler} setPassword={setPassword}/>
-        </Route>
-
       </Switch>
-
-
-
-
     </div>
   );
 }
-
-
 
 function Card(props) {
   return(
